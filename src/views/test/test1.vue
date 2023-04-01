@@ -16,7 +16,7 @@
 export default {
     data() {
         return {
-            res: "http://192.168.0.102:1146/function/getQrCode?url=",
+            res: "http://192.168.0.101:1146/function/getQrCode?url=",
             urls: "",
             url: "",
         }

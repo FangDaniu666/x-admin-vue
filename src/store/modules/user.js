@@ -6,7 +6,7 @@ const getDefaultState = () => {
   return {
     token: getToken(),
     name: '',
-    avatar: ''
+    avatar: 'https://cdn.jsdelivr.net/gh/FangDaniu666/images@master/img/snow%20miku.jpg'
   }
 }
 

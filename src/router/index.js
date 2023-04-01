@@ -81,25 +81,25 @@ export const constantRoutes = [
     path: '/test',
     component: Layout,
     redirect: '/test/test1',
-    meta: { title: '测试模块', icon: 'el-icon-s-help' },
+    meta: { title: '功能模块', icon: 'el-icon-s-help' },
     children: [
       {
         path: 'test1',
         name: 'test1',
         component: () => import('@/views/test/test1'),
-        meta: { title: '测试1', icon: 'example' }
+        meta: { title: '在线生成二维码', icon: 'example' }
       },
       {
         path: 'test2',
         name: 'test2',
         component: () => import('@/views/test/test2'),
-        meta: { title: '测试2', icon: 'example' }
+        meta: { title: '大牛图站', icon: 'example' }
       },
       {
         path: 'test3',
         name: 'test3',
         component: () => import('@/views/test/test3'),
-        meta: { title: '测试3', icon: 'example' }
+        meta: { title: '功能3', icon: 'example' }
       },
     ]
   },
