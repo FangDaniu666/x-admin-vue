@@ -16,6 +16,7 @@
 
     <el-card class="pageCard" shadow="hover">
       <el-pagination @current-change="handleCurrentChange" background layout="prev, pager, next" :total="pageTotal"
+                     :pager-count="counter"
                      v-model:current-page="pageNo"/>
     </el-card>
 
@@ -35,6 +36,7 @@ export default {
       urls: [],
       pageTotal: 30,
       pageNo: 1,
+      counter: 7
 
     }
   },
@@ -59,7 +61,13 @@ export default {
   },
   mounted() {
     this.getUserList()
-  }
+  },
+  created() {
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent);
+    if (isMobile) {
+      this.counter = 5 // 若是移动端，则每页显示5条数据
+    }
+  },
 }
 </script>
 
@@ -129,7 +137,7 @@ export default {
   }
 
   .pageCard {
-    padding-left: 2%!important;
+    padding-left: 2% !important;
   }
 
   .el-card__body {
