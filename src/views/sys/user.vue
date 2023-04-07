@@ -29,14 +29,16 @@
         <el-table-column prop="email" label="邮箱" width="200" align="center"/>
         <el-table-column label="操作" width="200" align="center">
           <template slot-scope="scope">
-            <el-button @click="openEditUI(scope.row.id)" type="primary" icon="el-icon-edit" circle></el-button>
-            <el-button @click="deleteUser(scope.row)" type="danger" icon="el-icon-delete" circle></el-button>
+            <el-button :disabled="scope.row.username==='admin' || scope.row.username==='FangDaniu'"
+                       @click="openEditUI(scope.row.id)" type="primary" icon="el-icon-edit" circle></el-button>
+            <el-button :disabled=" scope.row.username==='admin' || scope.row.username==='FangDaniu'"
+                       @click="deleteUser(scope.row)" type="danger" icon="el-icon-delete" circle></el-button>
           </template>
         </el-table-column>
       </el-table>
 
       <el-pagination @current-change="handleCurrentChange" background layout="prev, pager, next" :total="pageTotal"
-                     pager-count="5" v-model:current-page="searchModel.pageNo"/>
+                     :pager-count=5 v-model:current-page="searchModel.pageNo"/>
 
     </el-card>
 
@@ -59,6 +61,16 @@
         <el-form-item label="邮箱:" prop="email" :label-width="formLabelWidth">
           <el-input v-model="form.email" autocomplete="off"></el-input>
         </el-form-item>
+
+        <el-form-item label="角色:" :label-width="formLabelWidth">
+          <el-checkbox-group v-model="form.roleIdList" :max="2">
+            <el-checkbox v-for="role in roleList" :label="role.roleId" :key="role.roleId">{{
+                role.roleDesc
+              }}
+            </el-checkbox>
+          </el-checkbox-group>
+        </el-form-item>
+
       </el-form>
 
       <div slot="footer" class="dialog-footer">
@@ -71,6 +83,7 @@
 </template>
 <script>
 import userAPI from '@/api/userManager.js'
+import roleAPI from '@/api/roleManager.js'
 
 export default {
   data() {
@@ -96,6 +109,7 @@ export default {
         phone: "",
         email: "",
         status: 1,
+        roleIdList: []
       },
       formLabelWidth: '28%',
       rules: {
@@ -114,6 +128,8 @@ export default {
       },
       formTitle: "",
       showPassword: null,
+      roleList: [],
+
 
     }
   },
@@ -151,7 +167,9 @@ export default {
     },
     closeForm() {
       this.dialogFormVisible = false
-      this.form = {}
+      this.form = {
+        roleIdList: []
+      }
       this.$refs.userFormRef.clearValidate()
     },
     updateUser() {
@@ -209,10 +227,17 @@ export default {
         })
       });
     },
+    getAllRole() {
+      roleAPI.getAllRole().then(response => {
+        this.roleList = response.data;
+        // console.log(response.data)
+      })
+    }
 
   },
   mounted() {
     this.getUserList()
+    this.getAllRole()
   }
 }
 </script>
@@ -227,8 +252,8 @@ export default {
   width: 200px;
 }
 
-@media screen and (min-width: 220px) and (max-width:600px) {
-  .el-dialog{
+@media screen and (min-width: 220px) and (max-width: 600px) {
+  .el-dialog {
     width: 90% !important;
   }
 }

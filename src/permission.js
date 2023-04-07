@@ -5,6 +5,7 @@ import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
 import { getToken } from '@/utils/auth' // get token from cookie
 import getPageTitle from '@/utils/get-page-title'
+import Layout from '@/layout'
 
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
@@ -34,7 +35,20 @@ router.beforeEach(async(to, from, next) => {
           // get user info
           await store.dispatch('user/getInfo')
 
-          next()
+          //路由转化
+          let myRoutes = myFilterAsyncRoutes(store.getters.menuList);
+          //404
+          myRoutes.push({
+            path: '*',
+            redirect: '/404',
+            hidden: true,
+
+          });
+          router.addRoutes(myRoutes);
+          global.myRoutes = myRoutes;
+          next({...to, replace: true})
+
+          // next()
         } catch (error) {
           // remove token and go to login page to re-login
           await store.dispatch('user/resetToken')
@@ -62,3 +76,19 @@ router.afterEach(() => {
   // finish progress bar
   NProgress.done()
 })
+
+function myFilterAsyncRoutes(menuList){
+  menuList.filter(menu =>{
+    if (menu.component === 'Layout'){
+      menu.component = Layout;
+      // console.log(menu.component)
+    } else {
+      menu.component = require(`@/views/${menu.component}.vue`).default;
+    }
+    if(menu.children && menu.children.length){
+      menu.children = myFilterAsyncRoutes(menu.children);
+    }
+    return true;
+  })
+  return menuList;
+}

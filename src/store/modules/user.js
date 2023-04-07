@@ -6,7 +6,8 @@ const getDefaultState = () => {
   return {
     token: getToken(),
     name: '',
-    avatar: 'https://cdn.jsdelivr.net/gh/FangDaniu666/images@master/img/snow%20miku.jpg'
+    avatar: 'https://cdn.jsdelivr.net/gh/FangDaniu666/images@master/img/snow%20miku.jpg',
+    menuList:[]
   }
 }
 
@@ -24,6 +25,9 @@ const mutations = {
   },
   SET_AVATAR: (state, avatar) => {
     state.avatar = avatar
+  },
+  SET_MENU_LIST: (state, menuList) => {
+    state.menuList = menuList
   }
 }
 
@@ -53,10 +57,11 @@ const actions = {
           reject('Verification failed, please Login again.')
         }
 
-        const { name, avatar } = data
+        const { name, avatar, menuList } = data
 
         commit('SET_NAME', name)
         commit('SET_AVATAR', avatar)
+        commit('SET_MENU_LIST', menuList)
         resolve(data)
       }).catch(error => {
         reject(error)
